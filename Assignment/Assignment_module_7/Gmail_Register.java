@@ -1,5 +1,9 @@
-package Assignment_module_7;
+package Assignment;
 
+import java.util.Set;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,13 +13,17 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Gmail_Register 
 {
+	static WebDriver driver;
+	@BeforeClass
 
-	public static void main(String[] args) throws InterruptedException
+	public static void openBrowser()
 	{
-	System.setProperty("webdriver.chrome.driver", "F:\\chromedriver-win64\\chromedriver.exe");
-	WebDriver driver = new ChromeDriver();
-	driver.get("https://accounts.google.com/lifecycle/steps/signup/name?continue=http://support.google.com/accounts/answer/27441?hl%3Den%26co%3DGENIE.Platform%253DDesktop&dsh=S17396365:1757912877811430&ec=GAZAdQ&flowEntry=SignUp&flowName=GlifWebSignIn&hl=en&ifkv=AdBytiN-gJB31wC0DKtDo2pUM5CScJLnHiZRPvNX6Cv9hi_cW7gMzVoJb-8Os1t8ZkT54emAvjzWtA&TL=AMbiOORhraUx3P1ZPpVCo4EDS0iti0wbGNgjR2bdLMOneAueZz8xfrTaCeC9-TLa");
+		driver= DriverConnection.getconnect("https://accounts.google.com/lifecycle/steps/signup/name?continue=http://support.google.com/accounts/answer/27441?hl%3Den%26co%3DGENIE.Platform%253DDesktop&dsh=S17396365:1757912877811430&ec=GAZAdQ&flowEntry=SignUp&flowName=GlifWebSignIn&hl=en&ifkv=AdBytiN-gJB31wC0DKtDo2pUM5CScJLnHiZRPvNX6Cv9hi_cW7gMzVoJb-8Os1t8ZkT54emAvjzWtA&TL=AMbiOORhraUx3P1ZPpVCo4EDS0iti0wbGNgjR2bdLMOneAueZz8xfrTaCeC9-TLa");
+	}
 	
+	@Test
+	public void loginTest() throws InterruptedException
+	{
 	Thread.sleep(1000);
 	driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/main/div[3]/div/div/div/div/button/span")).click();
 	driver.manage().window().maximize();
@@ -30,7 +38,7 @@ public class Gmail_Register
 	driver.findElement(By.xpath("//*[@id=\"month\"]/div/div[1]/div")).click();	
 	driver.findElement(By.xpath("//*[@id=\"month\"]/div/div[2]/ul/li[7]")).click();
 	
-	Thread.sleep(1000);
+	Thread.sleep(2000);
 	
     driver.findElement(By.id("day")).sendKeys("17");
 	
@@ -47,12 +55,31 @@ public class Gmail_Register
 	
     //Select gender = new Select(driver.findElement(By.id("gender")));
     //gender.selectByVisibleText("Male");
-    
+	driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/main/div[2]/div/div/div/form/span/section/div/div/div[3]/button")).click();
     Thread.sleep(1000);
+    String mainwin = driver.getWindowHandle();
+	System.out.println(mainwin);
+	
+	driver.findElement(By.linkText("Learn more about sharing your birthday and gender")).click();
+	
+	Thread.sleep(3000);
+	
+	Set<String> allwins = driver.getWindowHandles();
+	for(String win : allwins)
+	{
+		if(!win.equals(mainwin))
+		{
+			driver.switchTo().window(win);
+			
+			driver.close();
+			
+			driver.switchTo().window(mainwin);
+		}
+	}	
+			
+   
     
-    driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/c-wiz/main/div[2]/div/div/div/form/span/section/div/div/div[3]/button")).click();
-    
-    Thread.sleep(1000);
+    //Thread.sleep(1000);
    
     //driver.findElement(By.xpath("//*[@id=\"yDmH0d\"]/div[2]/div[2]/div/div[1]/div/div/div/span/div[4]/a")).click();
    
@@ -79,7 +106,7 @@ public class Gmail_Register
   
   driver.findElement(By.xpath("//*[@id=\"next\"]/div/button/span")).click();
   
-  Thread.sleep(1000);
+  Thread.sleep(2000);
    
    driver.findElement(By.name("Passwd")).sendKeys("Mahadev2025");
     
