@@ -3,40 +3,28 @@ package Assignment;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
-@RunWith(Parameterized.class)
+
 public class LoginParameters 
 {
-	String username;
-	String password;
-	
-	
-	public LoginParameters(String username,String password) 
-	{
-		
-		this.username = username;
-		this.password = password;
-		
-	}
 	
 	static WebDriver driver;
 	
-	@BeforeClass
+	@BeforeMethod
 	public static void openBrowser()
 	{
 		 driver= DriverConnection.getconnect("https://www.facebook.com/");
 	}
 	
-	@Test
-	public void loginTest() throws InterruptedException
+	@Test(dataProvider = "loginData")
+	public void loginTest(String username, String password) throws InterruptedException
 	{
 		Thread.sleep(2500);
 		
@@ -47,31 +35,29 @@ public class LoginParameters
 		WebElement pass =  driver.findElement(By.id("pass"));
 		pass.clear();
 		pass.sendKeys(password);
+		
+        Thread.sleep(3000);
+        
+        driver.navigate().back();
 	}
 	
-	@Parameters
-	public static List<Object[]> getData()
+	@AfterMethod
+	public void closeBrowser() {
+        driver.quit();
+	}
+	
+	@DataProvider(name= "loginData")
+	public Object[][] getData()
 	{
-		Object obj[][] = new Object[4][2];
-		
-		obj[0][0] = "abc@gmail.com";
-		obj[0][1] = "abc";
-		
-		
-		obj[1][0] = "xyz@gmail.com";
-		obj[1][1] = "xyz";
-		
-		
-		obj[2][0] = "tops@gmail.com";
-		obj[2][1] = "tops";
-		
-		
-		obj[3][0] = "tech@gmail.com";
-		obj[3][1] = "tech";
-	
-		
-		return Arrays.asList(obj);
-		
+		return new Object[][]
+				{
+					{"abc@gmail.com", "abc"},
+		            {"xyz@gmail.com", "xyz"},
+		            {"tops@gmail.com", "tops"},
+		            {"tech@gmail.com", "tech"}
+				};
+			
 	}
+	
 	
 }
